@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import Column, String, Boolean, DateTime, Text, Index
 from sqlalchemy.orm import declarative_base
 
@@ -21,7 +21,7 @@ class Email(Base):
         DateTime(timezone=True),
         nullable=False,
         index=True,
-        default=datetime.now(),
+        default=lambda: datetime.now(timezone.utc),
     )
     is_read = Column(
         Boolean,
@@ -32,13 +32,13 @@ class Email(Base):
     processed = Column(Boolean, default=False, nullable=False, index=True)
     created_at = Column(
         DateTime(timezone=True),
-        default=datetime.now(),
+        default=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
     updated_at = Column(
         DateTime(timezone=True),
-        default=datetime.now(),
-        onupdate=datetime.now(),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
     __table_args__ = (Index("idx_unprocessed_emails", "processed", "is_read"),)
