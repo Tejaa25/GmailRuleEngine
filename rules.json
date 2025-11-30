@@ -1,0 +1,94 @@
+{
+    "rules": [
+
+        {
+            "description": "Filter Important Emails",
+            "predicate": "All",
+            "conditions": [
+                {
+                    "field": "sender",
+                    "predicate": "equals",
+                    "value": ["tejeshwaran098@mailinator.com"]
+                },
+                {
+                    "field": "subject",
+                    "predicate": "contains",
+                    "value": ["Software", "IT", "Backend"]
+                },
+                {
+                    "field": "received_at",
+                    "predicate": "less_than",
+                    "value": 20,
+                    "unit": "days"
+                }
+            ],
+            "actions": [
+                {
+                    "action": "move_message",
+                    "destination": "IMPORTANT"
+                },
+                {
+                    "action": "mark_as_read"
+                }
+            ]
+        },
+        {
+            "description": "Move ticket booking confirmation emails",
+            "predicate": "Any",
+            "conditions": [
+                {
+                    "field": "sender",
+                    "predicate": "contains",
+                    "value": ["irctc"]
+                },
+                {
+                    "field": "subject",
+                    "predicate": "contains",
+                    "value": ["ticket", "irctc", "booking", "confirmation"]
+                },
+                {
+                    "field": "received_at",
+                    "predicate": "less_than",
+                    "value": 1,
+                    "unit": "months"
+                }
+            ],
+            "actions": [
+                {
+                    "action": "move_message",
+                    "destination": "IRCTC"
+                },
+                {
+                    "action": "mark_as_read"
+                }
+            ]
+        },
+        {
+            "description": "Mark as read spam emails",
+            "predicate": "Any",
+            "conditions": [
+                {
+                    "field": "sender",
+                    "predicate": "contains",
+                    "value": ["dream11", "my11", "rummycircle"]
+                },
+                {
+                    "field": "subject",
+                    "predicate": "contains",
+                    "value": ["Win", "You've won"]
+                },
+                {
+                    "field": "received_at",
+                    "predicate": "less_than",
+                    "value": 10,
+                    "unit": "days"
+                }
+            ],
+            "actions": [
+                {
+                    "action": "mark_as_read"
+                }
+            ]
+        }
+    ]
+}

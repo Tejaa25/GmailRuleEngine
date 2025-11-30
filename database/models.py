@@ -21,7 +21,7 @@ class Email(Base):
         DateTime(timezone=True),
         nullable=False,
         index=True,
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(timezone.utc), # don't use datetime.now() directly!
     )
     is_read = Column(
         Boolean,
