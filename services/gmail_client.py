@@ -19,6 +19,7 @@ class GmailClient:
     def __init__(self, credentials: Credentials):
         self.credentials = credentials
         self.service = self._build_service()
+        self._label_cache = None
 
     def _build_service(self):
 
@@ -104,11 +105,18 @@ class GmailClient:
             return False
 
     def get_labels(self):
+        if self._label_cache is not None:
+            return self._label_cache
         try:
             response = self._execute_with_retry(
                 self.service.users().labels().list(userId="me")
             )
-            return response.get("labels", [])
+            labels = response.get("labels", [])
+
+            # Caching labels to reduce api calls. (name (uppercase) -> ID)
+            self._label_cache = {label["name"].upper(): label["id"] for label in labels}
+            logger.info(f"Loaded {len(self._label_cache)} labels")
+            return self._label_cache
         except HttpError as e:
             logger.error(f"Failed to get labels: {e}")
             return {}

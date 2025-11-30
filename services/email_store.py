@@ -33,7 +33,8 @@ class EmailStore:
 
         logger.info(f"Found {len(message_refs)} messages to process")
         with get_db_session() as session:
-            # TODO: change this to parallel processing for better performance
+            # TODO: We can optimize this by fetching messages in parallel
+            # but keeping it simple for now
             for i in range(0, len(message_refs), Config.FETCH_BATCH_SIZE):
                 batch = message_refs[i : i + Config.FETCH_BATCH_SIZE]
                 batch_success, batch_fail = self._process_batch(session, batch)

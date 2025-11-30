@@ -1,3 +1,6 @@
+# Dependencies
+# Python 3.10+
+
 # Google API & Authentication
 google-api-core==2.24.2
 google-api-python-client==2.164.0

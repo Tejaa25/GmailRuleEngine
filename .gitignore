@@ -4,4 +4,4 @@ credentials.json
 __pycache__/
 *.pyc
 *.pkl
-*.log
+logs/*.log

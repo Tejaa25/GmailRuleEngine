@@ -19,7 +19,7 @@ def setup_logger(name: str) -> logging.Logger:
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
 
-    file_handler = logging.FileHandler("app.log")
+    file_handler = logging.FileHandler("log/app.log")
     file_handler.setLevel(log_level)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
