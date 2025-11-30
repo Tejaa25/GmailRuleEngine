@@ -5,9 +5,18 @@ google-auth==2.38.0
 google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.1
 
+# HTTP & OAuth
+httplib2==0.22.0
+requests==2.32.3
+requests-oauthlib==2.0.0
+oauthlib==3.2.2
+
 # Database
 SQLAlchemy==2.0.39
 psycopg2-binary==2.9.10
 
 # Configuration
 python-dotenv==1.0.1
+
+# JSON Schema Validation
+jsonschema==4.23.0
