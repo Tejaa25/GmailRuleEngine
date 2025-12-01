@@ -1,20 +1,4 @@
-# Global action registry
-_action_registry = {}
-
-
-def register_action(name: str):
-    """Decorator to register action."""
-
-    def decorator(func):
-        _action_registry[name] = func
-        return func
-
-    return decorator
-
-
-def get_action(name: str):
-    return _action_registry.get(name)
-
-
-def list_actions():
-    return list(_action_registry.keys())
+from .base import register_action, get_action, list_actions
+from .mark_as_read import execute
+from .mark_as_unread import execute
+from .move_message import execute

@@ -2,11 +2,10 @@ import sys
 
 from auth import GmailAuthenticator
 from services import GmailClient, EmailStore
-from rules.processor import RuleProcessor
+from rules import RuleProcessor
 from database import db_manager
 from config import Config
-from utils import parse_arguments
-from utils import get_logger
+from utils import parse_arguments, get_logger
 
 logger = get_logger(__name__)
 

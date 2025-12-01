@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from sqlalchemy.orm import Session
-
 from database import Email
 from database import get_db_session
 from services import GmailClient
@@ -54,13 +52,13 @@ class RuleProcessor:
             logger.info(f"Found {len(emails)} emails to process")
 
             for email in emails:
-                self._process_single_email(session, email)
+                self._process_single_email(email)
             session.commit()
 
         logger.info(f"Processing complete:\n{self.stats}")
         return self.stats
 
-    def _process_single_email(self, session: Session, email: Email) -> None:
+    def _process_single_email(self, email: Email) -> None:
         """Process a single email with al rules."""
 
         self.stats.emails_processed += 1
@@ -72,25 +70,15 @@ class RuleProcessor:
                     logger.info(
                         f"Email {email.id[:10]}... matched rule: {rule.description}"
                     )
-                    # Execute actions
-                    for action_dict in rule.actions:
-                        self._execute_action(
-                            session,
-                            email,
-                            action_dict,
-                        )
+                    for action_dict in rule.actions: # Execute actions
+                        self._execute_action(email, action_dict)
             if matched_any_rule:
                 self.stats.emails_matched += 1
             email.processed = True
         except Exception as e:
             logger.error(f"Error processing email {email.id}: {e}")
 
-    def _execute_action(
-        self,
-        session: Session,
-        email: Email,
-        action_dict: dict,
-    ) -> None:
+    def _execute_action(self, email: Email, action_dict: dict) -> None:
         """Execute a single action on an email."""
 
         action_name = action_dict.get("action")

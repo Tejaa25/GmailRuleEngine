@@ -1,5 +1,4 @@
 import pickle
-from pathlib import Path
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -17,17 +16,10 @@ class GmailAuthenticator:
     This class have all the authentication logic.
     """
 
-    def __init__(
-        self,
-        credentials_path: Path = Config.CREDENTIALS_PATH,
-        token_path: Path = Config.TOKEN_PATH,
-        scopes: list[str] = Config.GMAIL_SCOPES,
-    ):
-        """Initialize the authenticator."""
-
-        self.credentials_path = credentials_path
-        self.token_path = token_path
-        self.scopes = scopes
+    def __init__(self):
+        self.credentials_path = Config.CREDENTIALS_PATH
+        self.token_path = Config.TOKEN_PATH
+        self.scopes = Config.GMAIL_SCOPES
         self._credentials = None
 
     def authenticate(self) -> Credentials:

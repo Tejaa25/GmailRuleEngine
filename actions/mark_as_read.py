@@ -1,7 +1,7 @@
 from actions import register_action
 from database import Email
 from services import GmailClient
-from utils.logger import get_logger
+from utils import get_logger
 
 logger = get_logger(__name__)
 
