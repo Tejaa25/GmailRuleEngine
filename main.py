@@ -1,13 +1,12 @@
 import sys
 
 from auth import GmailAuthenticator
-from services.gmail_client import GmailClient
-from services.email_store import EmailStore
+from services import GmailClient, EmailStore
 from rules.processor import RuleProcessor
 from database import db_manager
 from config import Config
 from utils import parse_arguments
-from utils.logger import get_logger
+from utils import get_logger
 
 logger = get_logger(__name__)
 
@@ -18,7 +17,7 @@ def setup_database() -> bool:
     try:
         logger.info("Initializing database...")
         db_manager.init_db()
-        if db_manager.health_check(): # Health check
+        if db_manager.health_check():  # Health check
             logger.info("Database connection verified")
             return True
         else:
@@ -33,7 +32,7 @@ def fetch_emails_step(gmail_client: GmailClient) -> bool:
     """Fetch and store emails from Gmail."""
 
     try:
-        logger.info(f"Fetching emails.")
+        logger.info("Fetching emails.")
         store = EmailStore(gmail_client)
         success_count, failure_count = store.fetch_and_store()
         logger.info(f"Successfully fetched emails count - {success_count}.")
@@ -51,7 +50,7 @@ def process_rules_step(gmail_client: GmailClient) -> bool:
     try:
         logger.info("Processing rules...")
         processor = RuleProcessor(gmail_client)
-        stats =  processor.process_emails()
+        stats = processor.process_emails()
         if stats.actions_failed > 0:
             logger.warning(f"Some actions failed: {stats.actions_failed} failures")
         return True
@@ -69,7 +68,7 @@ def main(fetch_only: bool = False, process_only: bool = False) -> int:
         Config.validate()
         logger.info("Configuration validated successfully.")
     except Exception as e:
-        logger.error("Env validation failed.")
+        logger.error(f"Env validation failed - {e}")
         return 1
 
     try:
@@ -109,8 +108,5 @@ if __name__ == "__main__":
             sys.exit(1)
 
     # Run main func
-    exit_code = main(
-        fetch_only=args.fetch_only,
-        process_only=args.process_only,
-    )
+    exit_code = main(fetch_only=args.fetch_only, process_only=args.process_only)
     sys.exit(exit_code)

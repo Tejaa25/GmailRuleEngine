@@ -6,7 +6,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 from config import Config
-from utils.logger import get_logger
+from utils import get_logger
 
 logger = get_logger(__name__)
 
@@ -99,11 +99,3 @@ class GmailAuthenticator:
         except Exception as e:
             logger.error(f"OAuth flow failed: {e}")
             raise
-
-    def invalidate_token(self) -> None:
-        """Function to remove stored token, and re-authenticate next time."""
-
-        if self.token_path.exists():
-            self.token_path.unlink()
-            logger.info("Token invalidated")
-        self._credentials = None

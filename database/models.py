@@ -13,7 +13,9 @@ class Email(Base):
 
     __tablename__ = "emails"
 
-    id = Column(String(255), primary_key=True, comment="Gmail message ID (unique identifier)")
+    id = Column(
+        String(255), primary_key=True, comment="Gmail message ID (unique identifier)"
+    )
     sender = Column(String(500), nullable=False, index=True)
     subject = Column(String(1000), nullable=False)
     message = Column(Text, nullable=True)
@@ -21,7 +23,9 @@ class Email(Base):
         DateTime(timezone=True),
         nullable=False,
         index=True,
-        default=lambda: datetime.now(timezone.utc), # don't use datetime.now() directly!
+        default=lambda: datetime.now(
+            timezone.utc
+        ),  # don't use datetime.now() directly!
     )
     is_read = Column(
         Boolean,
@@ -41,7 +45,6 @@ class Email(Base):
         onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
-    __table_args__ = (Index("idx_unprocessed_emails", "processed", "is_read"),)
 
     def __repr__(self) -> str:
         """String representation for debugging."""

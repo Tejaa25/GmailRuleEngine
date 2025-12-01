@@ -15,7 +15,7 @@ def execute(gmail_client: GmailClient, email: Email, params: dict) -> bool:
             message_id=email.id, remove_labels=["UNREAD"]
         )
         if success:
-            email.is_read = True # Update database
+            email.is_read = True  # Update database
             logger.info(f"Marked email {email.id} as read.")
             return True
         else:

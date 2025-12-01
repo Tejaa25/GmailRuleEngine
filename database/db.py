@@ -6,7 +6,7 @@ from sqlalchemy import text
 
 from config import Config
 from database import Base
-from utils.logger import get_logger
+from utils import get_logger
 
 logger = get_logger(__name__)
 

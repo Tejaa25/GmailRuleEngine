@@ -17,9 +17,7 @@ def execute(gmail_client: GmailClient, email: Email, params: dict) -> bool:
     try:
         label_id = gmail_client.get_label_id(destination)
         if not label_id:
-            logger.warning(
-                f"Label '{destination}' not found for email {email.id}."
-            )
+            logger.warning(f"Label '{destination}' not found for email {email.id}.")
             return False
         success = gmail_client.modify_message(
             message_id=email.id, add_labels=[label_id]

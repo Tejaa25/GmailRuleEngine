@@ -64,7 +64,7 @@ class DateCondition(Condition):
 
     def __init__(self, field: str, predicate: str, value: int, unit: str):
         super().__init__(field, predicate, value)
-        self.unit = unit # Unit will be (days, months)
+        self.unit = unit  # Unit will be (days, months)
 
     def evaluate(self, email: Email) -> bool:
 
@@ -76,7 +76,7 @@ class DateCondition(Condition):
         if self.unit == "days":
             delta = (now - field_value).days
         elif self.unit == "months":
-            total_year_diff = (now.year - field_value.year)
+            total_year_diff = now.year - field_value.year
             delta = total_year_diff * 12 + (now.month - field_value.month)
         else:
             return False
@@ -124,7 +124,7 @@ class ConditionCreator:
         if not all([field, predicate, value is not None]):
             raise ValueError(f"Invalid conditions: {condition_dict}")
 
-        if "unit" in condition_dict: # Date conditions have unit
+        if "unit" in condition_dict:  # Date conditions have unit
             unit = condition_dict["unit"]
             return DateCondition(field, predicate, value, unit)
         else:
