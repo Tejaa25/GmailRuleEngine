@@ -130,7 +130,7 @@
       ],
       "actions": [
         {
-          "action": "mark_as_unread"
+          "action": "mark_as_read"
         },
         {
           "action": "move_message",
