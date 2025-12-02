@@ -1,32 +1,6 @@
 {
   "rules": [
     {
-      "description": "Archive old newsletters and promotional emails",
-      "predicate": "All",
-      "conditions": [
-        {
-          "field": "sender",
-          "predicate": "contains",
-          "value": ["newsletter", "promo", "marketing", "noreply"]
-        },
-        {
-          "field": "received_at",
-          "predicate": "greater_than",
-          "value": 14,
-          "unit": "days"
-        }
-      ],
-      "actions": [
-        {
-          "action": "mark_as_read"
-        },
-        {
-          "action": "move_message",
-          "destination": "Archive"
-        }
-      ]
-    },
-    {
       "description": "Flag urgent emails from any sender",
       "predicate": "Any",
       "conditions": [
@@ -93,37 +67,6 @@
       ]
     },
     {
-      "description": "Auto-archive social media notifications older than 7 days",
-      "predicate": "All",
-      "conditions": [
-        {
-          "field": "sender",
-          "predicate": "contains",
-          "value": ["linkedin.com", "twitter.com", "facebook.com", "instagram.com"]
-        },
-        {
-          "field": "subject",
-          "predicate": "contains",
-          "value": ["notification", "mentioned you", "liked your", "commented on"]
-        },
-        {
-          "field": "received_at",
-          "predicate": "greater_than",
-          "value": 7,
-          "unit": "days"
-        }
-      ],
-      "actions": [
-        {
-          "action": "mark_as_read"
-        },
-        {
-          "action": "move_message",
-          "destination": "Archive"
-        }
-      ]
-    },
-    {
       "description": "Mark automated system emails from CI/CD as read",
       "predicate": "All",
       "conditions": [
@@ -171,37 +114,6 @@
       ]
     },
     {
-      "description": "Archive old meeting invites and calendar events",
-      "predicate": "All",
-      "conditions": [
-        {
-          "field": "sender",
-          "predicate": "contains",
-          "value": ["calendar-notification@google.com", "calendar@"]
-        },
-        {
-          "field": "subject",
-          "predicate": "contains",
-          "value": ["invitation", "event", "meeting"]
-        },
-        {
-          "field": "received_at",
-          "predicate": "greater_than",
-          "value": 1,
-          "unit": "months"
-        }
-      ],
-      "actions": [
-        {
-          "action": "mark_as_read"
-        },
-        {
-          "action": "move_message",
-          "destination": "Archive"
-        }
-      ]
-    },
-    {
       "description": "Flag security and account alerts immediately",
       "predicate": "Any",
       "conditions": [
@@ -220,32 +132,6 @@
         {
           "action": "move_message",
           "destination": "Security"
-        }
-      ]
-    },
-    {
-      "description": "Clean up old automated report emails",
-      "predicate": "All",
-      "conditions": [
-        {
-          "field": "subject",
-          "predicate": "contains",
-          "value": ["daily report", "weekly summary", "monthly analytics", "status update"]
-        },
-        {
-          "field": "received_at",
-          "predicate": "greater_than",
-          "value": 2,
-          "unit": "months"
-        }
-      ],
-      "actions": [
-        {
-          "action": "mark_as_read"
-        },
-        {
-          "action": "move_message",
-          "destination": "Archive"
         }
       ]
     }
