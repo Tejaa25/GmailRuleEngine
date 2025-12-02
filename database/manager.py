@@ -22,9 +22,7 @@ class DatabaseManager:
             self.database_url,
             pool_size=5,
             max_overflow=10,
-            pool_pre_ping=True,
-            pool_recycle=3600,
-            echo=False,
+            pool_pre_ping=True
         )
         self.SessionLocal = sessionmaker(
             bind=self.engine,
@@ -57,17 +55,6 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"Failed to initialize db: {e}")
             raise
-
-    def health_check(self) -> bool:
-        """Check if the db connection is healthy."""
-
-        try:
-            with self.get_session() as session:
-                session.execute(text("SELECT 1"))
-            return True
-        except Exception as e:
-            logger.error(f"Database health check failed: {e}")
-            return False
 
 
 # Global database manager instance
