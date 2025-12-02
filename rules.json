@@ -7,7 +7,7 @@
         {
           "field": "subject",
           "predicate": "contains",
-          "value": ["URGENT", "ASAP", "CRITICAL", "IMPORTANT", "ACTION REQUIRED"]
+          "value": ["URGENT", "ASAP", "CRITICAL", "IMPORTANT", "ACTION REQUIRED", "Interview"]
         },
         {
           "field": "message",
@@ -129,6 +129,9 @@
         }
       ],
       "actions": [
+        {
+          "action": "mark_as_unread"
+        },
         {
           "action": "move_message",
           "destination": "Security"
