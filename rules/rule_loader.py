@@ -81,7 +81,8 @@ RULE_SCHEMA = {
 class RuleLoader:
     """Loads rules from JSON file."""
 
-    def __init__(self):
+    def __init__(self, gmail_client=None):
+        self.gmail_client = gmail_client
         self.rules_file = Config.RULES_FILE
         self._cached_rules = None
 
@@ -133,8 +134,11 @@ class RuleLoader:
 
         actions = rule_dict["actions"]
         for action in actions:
-            if action["action"] == "move_message" and "destination" not in action:
-                raise ValueError("move_message action requires 'destination' field")
+            if action["action"] == "move_message":
+                if "destination" not in action:
+                    raise ValueError("move_message action requires 'destination' field")
+                if self.gmail_client:
+                    self.gmail_client.get_or_create_label(action["destination"])
 
         return Rule(
             predicate=predicate,

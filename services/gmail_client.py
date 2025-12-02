@@ -40,25 +40,20 @@ class GmailClient:
         """Returns the List of message with 'id' and 'threadId'"""
 
         messages = []
-        max_results = Config.MAX_RESULTS_PER_QUERY
         try:
             request = (
                 self.service.users()
                 .messages()
                 .list(
                     userId="me",
-                    maxResults=min(max_results, 500),
+                    maxResults=min(Config.MAX_RESULTS_PER_QUERY, 500),
                 )
             )
-            while request is not None and len(messages) < max_results:
+            while request is not None:
                 response = self._execute_with_retry(request)
                 batch = response.get("messages", [])
                 messages.extend(batch)
-                if len(messages) >= max_results:
-                    messages = messages[:max_results]
-                    break
                 request = self.service.users().messages().list_next(request, response)
-
             logger.info(f"Listed {len(messages)} messages")
             return messages
         except HttpError as e:
@@ -124,6 +119,20 @@ class GmailClient:
     def get_label_id(self, label_name: str):
 
         return self.get_labels().get(label_name.upper())
+
+    def get_or_create_label(self, destination):
+        """Function to get or create label if it does not exist."""
+
+        if not self.get_label_id(destination):
+            new_label = {
+                'name': destination,
+                'labelListVisibility': 'labelShow',
+                'messageListVisibility': 'show'
+            }
+            logger.info(f"Attempting to create label: '{destination}'")
+            self._execute_with_retry(
+                self.service.users().labels().create(userId='me', body=new_label)
+            )
 
     @staticmethod
     def extract_headers(message):

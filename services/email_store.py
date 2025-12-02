@@ -23,8 +23,6 @@ class EmailStore:
 
         success_count = 0
         failure_count = 0
-        logger.info(f"Fetching emails.")
-
         # Get the message IDs
         message_refs = self.gmail_client.list_messages()
         if not message_refs:
@@ -109,6 +107,7 @@ class EmailStore:
     def _store_email(session: Session, email: Email) -> None:
         """Store email in database with update or create logic."""
 
+        # TODO: Implement bulk update or create in single query
         stmt = (
             insert(Email)
             .values(

@@ -36,7 +36,7 @@ class RuleProcessor:
 
     def __init__(self, gmail_client: GmailClient):
         self.gmail_client = gmail_client
-        self.rules = RuleLoader().load_rules()
+        self.rules = RuleLoader(gmail_client=gmail_client).load_rules()
         self.stats = ProcessingStats()
 
     def process_emails(self):
