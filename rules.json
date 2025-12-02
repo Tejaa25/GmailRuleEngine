@@ -1,94 +1,253 @@
 {
-    "rules": [
-
+  "rules": [
+    {
+      "description": "Archive old newsletters and promotional emails",
+      "predicate": "All",
+      "conditions": [
         {
-            "description": "Filter Important Emails",
-            "predicate": "All",
-            "conditions": [
-                {
-                    "field": "sender",
-                    "predicate": "equals",
-                    "value": ["tejeshwaran098@mailinator.com"]
-                },
-                {
-                    "field": "subject",
-                    "predicate": "contains",
-                    "value": ["Software", "IT", "Backend"]
-                },
-                {
-                    "field": "received_at",
-                    "predicate": "less_than",
-                    "value": 20,
-                    "unit": "days"
-                }
-            ],
-            "actions": [
-                {
-                    "action": "move_message",
-                    "destination": "IMPORTANT"
-                },
-                {
-                    "action": "mark_as_read"
-                }
-            ]
+          "field": "sender",
+          "predicate": "contains",
+          "value": ["newsletter", "promo", "marketing", "noreply"]
         },
         {
-            "description": "Move ticket booking confirmation emails",
-            "predicate": "Any",
-            "conditions": [
-                {
-                    "field": "sender",
-                    "predicate": "contains",
-                    "value": ["irctc"]
-                },
-                {
-                    "field": "subject",
-                    "predicate": "contains",
-                    "value": ["ticket", "irctc", "booking", "confirmation"]
-                },
-                {
-                    "field": "received_at",
-                    "predicate": "less_than",
-                    "value": 1,
-                    "unit": "months"
-                }
-            ],
-            "actions": [
-                {
-                    "action": "move_message",
-                    "destination": "IRCTC"
-                },
-                {
-                    "action": "mark_as_read"
-                }
-            ]
-        },
-        {
-            "description": "Mark as read spam emails",
-            "predicate": "Any",
-            "conditions": [
-                {
-                    "field": "sender",
-                    "predicate": "contains",
-                    "value": ["dream11", "my11", "rummycircle"]
-                },
-                {
-                    "field": "subject",
-                    "predicate": "contains",
-                    "value": ["Win", "You've won"]
-                },
-                {
-                    "field": "received_at",
-                    "predicate": "less_than",
-                    "value": 10,
-                    "unit": "days"
-                }
-            ],
-            "actions": [
-                {
-                    "action": "mark_as_read"
-                }
-            ]
+          "field": "received_at",
+          "predicate": "greater_than",
+          "value": 14,
+          "unit": "days"
         }
-    ]
+      ],
+      "actions": [
+        {
+          "action": "mark_as_read"
+        },
+        {
+          "action": "move_message",
+          "destination": "Archive"
+        }
+      ]
+    },
+    {
+      "description": "Flag urgent emails from any sender",
+      "predicate": "Any",
+      "conditions": [
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": ["URGENT", "ASAP", "CRITICAL", "IMPORTANT", "ACTION REQUIRED"]
+        },
+        {
+          "field": "message",
+          "predicate": "contains",
+          "value": ["urgent", "deadline today", "immediate action"]
+        }
+      ],
+      "actions": [
+        {
+          "action": "move_message",
+          "destination": "IMPORTANT"
+        }
+      ]
+    },
+    {
+      "description": "Mark invoices and receipts as read after 30 days",
+      "predicate": "All",
+      "conditions": [
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": ["invoice", "receipt", "payment confirmation", "order confirmation"]
+        },
+        {
+          "field": "received_at",
+          "predicate": "greater_than",
+          "value": 30,
+          "unit": "days"
+        }
+      ],
+      "actions": [
+        {
+          "action": "mark_as_read"
+        }
+      ]
+    },
+    {
+      "description": "Prioritize emails from VIP clients",
+      "predicate": "Any",
+      "conditions": [
+        {
+          "field": "sender",
+          "predicate": "contains",
+          "value": ["@vipclient.com", "@importantcompany.com", "@bigcustomer.com"]
+        },
+        {
+          "field": "sender",
+          "predicate": "equals",
+          "value": "ceo@mycompany.com"
+        }
+      ],
+      "actions": [
+        {
+          "action": "move_message",
+          "destination": "VIP"
+        }
+      ]
+    },
+    {
+      "description": "Auto-archive social media notifications older than 7 days",
+      "predicate": "All",
+      "conditions": [
+        {
+          "field": "sender",
+          "predicate": "contains",
+          "value": ["linkedin.com", "twitter.com", "facebook.com", "instagram.com"]
+        },
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": ["notification", "mentioned you", "liked your", "commented on"]
+        },
+        {
+          "field": "received_at",
+          "predicate": "greater_than",
+          "value": 7,
+          "unit": "days"
+        }
+      ],
+      "actions": [
+        {
+          "action": "mark_as_read"
+        },
+        {
+          "action": "move_message",
+          "destination": "Archive"
+        }
+      ]
+    },
+    {
+      "description": "Mark automated system emails from CI/CD as read",
+      "predicate": "All",
+      "conditions": [
+        {
+          "field": "sender",
+          "predicate": "contains",
+          "value": ["noreply@github.com", "jenkins@", "gitlab@", "circleci@"]
+        },
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": ["build", "deployment", "pipeline", "succeeded", "passed"]
+        }
+      ],
+      "actions": [
+        {
+          "action": "mark_as_read"
+        }
+      ]
+    },
+    {
+      "description": "Keep recent emails from recruiters unread for follow-up",
+      "predicate": "All",
+      "conditions": [
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": ["job opportunity", "position at", "career opportunity", "hiring"]
+        },
+        {
+          "field": "received_at",
+          "predicate": "less_than",
+          "value": 3,
+          "unit": "days"
+        }
+      ],
+      "actions": [
+        {
+          "action": "mark_as_unread"
+        },
+        {
+          "action": "move_message",
+          "destination": "Jobs"
+        }
+      ]
+    },
+    {
+      "description": "Archive old meeting invites and calendar events",
+      "predicate": "All",
+      "conditions": [
+        {
+          "field": "sender",
+          "predicate": "contains",
+          "value": ["calendar-notification@google.com", "calendar@"]
+        },
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": ["invitation", "event", "meeting"]
+        },
+        {
+          "field": "received_at",
+          "predicate": "greater_than",
+          "value": 1,
+          "unit": "months"
+        }
+      ],
+      "actions": [
+        {
+          "action": "mark_as_read"
+        },
+        {
+          "action": "move_message",
+          "destination": "Archive"
+        }
+      ]
+    },
+    {
+      "description": "Flag security and account alerts immediately",
+      "predicate": "Any",
+      "conditions": [
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": ["security alert", "suspicious activity", "password reset", "login attempt"]
+        },
+        {
+          "field": "message",
+          "predicate": "contains",
+          "value": ["unauthorized access", "verify your identity", "unusual activity"]
+        }
+      ],
+      "actions": [
+        {
+          "action": "move_message",
+          "destination": "Security"
+        }
+      ]
+    },
+    {
+      "description": "Clean up old automated report emails",
+      "predicate": "All",
+      "conditions": [
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": ["daily report", "weekly summary", "monthly analytics", "status update"]
+        },
+        {
+          "field": "received_at",
+          "predicate": "greater_than",
+          "value": 2,
+          "unit": "months"
+        }
+      ],
+      "actions": [
+        {
+          "action": "mark_as_read"
+        },
+        {
+          "action": "move_message",
+          "destination": "Archive"
+        }
+      ]
+    }
+  ]
 }
