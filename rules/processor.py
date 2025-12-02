@@ -47,7 +47,7 @@ class RuleProcessor:
         # Process in batches
         with get_db_session() as session:
             query = session.query(Email).filter(Email.processed == False)
-            emails = query.limit(Config.RULE_PROCESSING_BATCH_SIZE * 10).all()
+            emails = query.limit(Config.RULE_PROCESSING_BATCH_SIZE).all()
 
             logger.info(f"Found {len(emails)} emails to process")
 

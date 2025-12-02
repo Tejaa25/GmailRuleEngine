@@ -8,10 +8,19 @@ from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
 
 from config import Config
+from database.manager import get_db_session
+from database.models import Email
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+def get_recent_email_date():
+    """Return date of the recent email in the database."""
+
+    with get_db_session() as session:
+        recent_email = session.query(Email.received_at).order_by(Email.received_at.desc()).first()
+        if recent_email:
+            return recent_email[0]
 
 class GmailClient:
     """This class is for fetching and modifying emails."""
@@ -40,13 +49,18 @@ class GmailClient:
         """Returns the List of message with 'id' and 'threadId'"""
 
         messages = []
+        extra_args = {}
         try:
+            if recent_date := get_recent_email_date():
+                timestamp = int(recent_date.timestamp())
+                extra_args = {"q":f"after:{timestamp}"}
             request = (
                 self.service.users()
                 .messages()
                 .list(
                     userId="me",
                     maxResults=min(Config.MAX_RESULTS_PER_QUERY, 500),
+                    **extra_args,
                 )
             )
             while request is not None:

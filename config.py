@@ -29,7 +29,7 @@ class Config:
     MAX_RESULTS_PER_QUERY = 500
 
     # Processing configuration
-    RULE_PROCESSING_BATCH_SIZE = 50
+    RULE_PROCESSING_BATCH_SIZE = 500
 
     # Logging config
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")

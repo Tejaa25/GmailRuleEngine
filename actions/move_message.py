@@ -20,7 +20,7 @@ def execute(gmail_client: GmailClient, email: Email, params: dict) -> bool:
             logger.warning(f"Label '{destination}' not found for email {email.id}.")
             return False
         success = gmail_client.modify_message(
-            message_id=email.id, add_labels=[label_id]
+            message_id=email.id, add_labels=[label_id], remove_labels=['INBOX']
         )
         if success:
             logger.info(f"Moved email {email.id} to '{destination}'")
